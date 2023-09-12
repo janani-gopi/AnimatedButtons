@@ -15,6 +15,7 @@ export default function App() {
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [{ translateX: offset.value }],
   }));
+   //onpress function when there's 3 tabs
   const handlePress = (tab) => {
     const newOffset = (() => {
       switch (tab) {
@@ -30,7 +31,7 @@ export default function App() {
     })();
     offset.value = withTiming(newOffset);
   };
-
+  //onpress function when there's 2 tabs
   const handlePress2 = (tab) => {
     const newOffset = (() => {
       switch (tab) {
@@ -45,6 +46,7 @@ export default function App() {
 
     offset.value = withTiming(newOffset);
   };
+    //onpress function when there's 4 tabs
   const handlePress3 = (tab) => {
     const newOffset = (() => {
       switch (tab) {
