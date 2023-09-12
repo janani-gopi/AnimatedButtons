@@ -1,13 +1,13 @@
-import React from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import React from "react";
+import { StyleSheet, View, Text, Pressable } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-const TAB_WIDTH = 120;
-const TABS = ['Home', 'Search', 'Profile'];
+const TABS = ["Home","Search"];
+const TAB_WIDTH = 384 / TABS.length;
 
 export default function App() {
   const offset = useSharedValue(-TAB_WIDTH);
@@ -15,27 +15,56 @@ export default function App() {
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [{ translateX: offset.value }],
   }));
-
   const handlePress = (tab) => {
     const newOffset = (() => {
       switch (tab) {
-        case 'Home':
+        case "Home":
           return -TAB_WIDTH;
-        case 'Search':
+        case "Search":
           return 0;
-        case 'Profile':
+        case "Profile":
           return TAB_WIDTH;
         default:
-          return -TAB_WIDTH;
+        return -0.5*TAB_WIDTH;
+      }
+    })();
+    offset.value = withTiming(newOffset);
+  };
+
+  const handlePress2 = (tab) => {
+    const newOffset = (() => {
+      switch (tab) {
+        case "Home":
+          return -0.5 * TAB_WIDTH;
+        case "Search":
+          return 0.5 * TAB_WIDTH;
+         default:
+          return -0.5*TAB_WIDTH
       }
     })();
 
     offset.value = withTiming(newOffset);
   };
-
+  const handlePress3 = (tab) => {
+    const newOffset = (() => {
+      switch (tab) {
+        case "Home":
+          return -1.5 * TAB_WIDTH;
+        case "Search":
+          return -0.5 * TAB_WIDTH;
+        case "Profile":
+          return 0.5 * TAB_WIDTH;
+        case "Setting":
+          return 1.5 * TAB_WIDTH;
+        default:
+        return -1.5 * TAB_WIDTH;
+      }
+    })();
+    offset.value = withTiming(newOffset);
+  };
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.animatedFill, animatedStyles]} />
+      <Animated.View style={[styles.animatedBorder, animatedStyles]} />
       <View style={styles.tabs}>
         {TABS.map((tab, i) => (
           <Pressable
@@ -43,44 +72,53 @@ export default function App() {
             style={
               i !== TABS.length - 1 ? [styles.tab, styles.divider] : styles.tab
             }
-            onPress={() => handlePress(tab)}>
+            onPress={() => {
+              if (TABS.length == 2) {
+                handlePress2(tab);
+              } else if (TABS.length == 3) {
+                handlePress(tab);
+              } else if (TABS.length == 4) {
+                handlePress3(tab);
+              }
+            }}
+          >
             <Text style={styles.tabLabel}>{tab}</Text>
           </Pressable>
         ))}
       </View>
-      
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%'
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
   },
   tabs: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   tab: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     paddingVertical: 10,
     width: TAB_WIDTH,
   },
   tabLabel: {
     fontSize: 15,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontWeight: "bold",
   },
   divider: {
     borderRightWidth: 1,
-    borderRightColor: '#ddd',
+    borderRightColor: "#ddd",
   },
-  animatedFill: {
+  animatedBorder: {
     height: 50,
-    width: 120,
-    backgroundColor: 'pink',
+    width: TAB_WIDTH,
+    backgroundColor: "pink",
     borderRadius: 20,
-    position:"absolute"
+    position: "absolute",
   },
 });
